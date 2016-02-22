@@ -1,0 +1,13 @@
+<html>
+<body>
+<h1>{{ title }} is working</h1>
+
+{% for obj in object_list %}
+    {{ obj.id }}
+    {{ obj.title }} <br/>
+    {{ obj.content }}  <br/>
+
+{% endfor %}
+{#<p>{{ instance }}</p>#}
+</body>
+</html>
