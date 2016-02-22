@@ -1,13 +1,41 @@
-<html>
-<body>
-<h1>{{ title }}</h1>
+{% extends "base.html" %}
+{% block title %}
+    {{ instance.title }} | {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    <div class="col-sm-12 ">
 
 
-    {{ instance.id }}
-    {{ instance.updated}} <br/>
-    {{ instance.content }}  <br/>
+<h1>{{ title }} <br/><small>Posted: {{ instance.timestamp }}</small></h1> <br/>
+    {{ instance.content|linebreaks }}  <br/>
+        {% if instance.image %}
+    <img src="{{ instance.image.url }}" class="img-responsive">
+    {%  endif %}
+</div>
+    <div class="col-sm-2 pull-right">
+    <p>Рассказать друзьям<br/>
+		<a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}">
+		<i class="fa fa-facebook-square fa-3x"></i>
+		</a>
+		<a href="https://vk.com/share.php?url={{ request.build_absolute_uri }}">
+		<i class="fa fa-vk fa-3x"></i>
+		</a>
+		</p>
+		<hr/>
+    </div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'streamdays';
 
-
-{#<p>{{ instance }}</p>#}
-</body>
-</html>
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</div>
+{% endblock %}
