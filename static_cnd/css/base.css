@@ -1,3 +1,8 @@
 h1{
     color:#777777;
 }
+.navbar-default .navbar-brand:focus, .navbar-default .navbar-brand:hover {
+    color: #5e5e5e;
+    background-color: transparent;
+    margin-bottom: 50;
+}

@@ -5,3 +5,6 @@ lib/
 .Python
 db.sqlite3
 env/
+*.pyc
+__pycache__/
+.idea/

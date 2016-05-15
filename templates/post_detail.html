@@ -8,8 +8,8 @@
 
 
 <h1>{{ title }} <br/><small>Posted: {{ instance.timestamp }}</small></h1> <br/>
-    {{ instance.content|linebreaks }}  <br/>
-        {% if instance.image %}
+
+     {% if instance.image %}
     <img src="{{ instance.image.url }}" class="img-responsive">
     {%  endif %}
 </div>
@@ -24,6 +24,12 @@
 		</p>
 		<hr/>
     </div>
+<div class='row'>
+<div class='col-sm-12'>
+<div class='content-markdown'>{{ instance.content }}</div>  <br/>
+</div>
+</div>
+
 <div id="disqus_thread"></div>
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
