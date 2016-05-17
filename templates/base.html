@@ -46,14 +46,39 @@
     $(document).ready(function(){
         $('.content-markdown').each(function(){
             var content = $(this).text()
-            console.log(content)
             var markedContent = marked(content)
-            console.log(markedContent)
             $(this).html(markedContent)
         });
-        $('.content-markdown img').each(function(){
+        $('.post_detail_item img').each(function(){
             $(this).addClass('img-responsive')
         })
+
+        var contentItem = $('#id_content');
+        $('#preview-content').html(marked(contentItem.val()));
+        //title
+        function setContent(value){
+            var markedContent = marked(value)
+            $('#preview-content').html(markedContent);
+            $('#preview-content img').each(function(){
+                $(this).addClass('img-responsive')
+            })
+        }
+        setContent(contentItem.val())
+        contentItem.keyup(function(){
+                    var newContent = $(this).val()
+            setContent(newContent)
+                })
+
+        var titleItem = $('#id_title');
+        function setTitle(value){
+             $('#preview-title').text(value)
+        }
+        setTitle(titleItem.val())
+        titleItem.keyup(function(){
+                    var newTitle = $(this).val()
+            setTitle(newTitle)
+                })
+
     })
 </script>
 </body>
