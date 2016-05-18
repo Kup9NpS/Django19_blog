@@ -2,13 +2,14 @@
 <nav class="navbar navbar-default navbar-static-top">
       <div class="container">
         <div class="navbar-header">
-          <a style="margin-bottom: 30;" class="navbar-brand"  href="{%url 'home' %}"><img src="{% static 'img/logo.jpg' %}"/></a>
+          <a style="margin-bottom: 30;" class="navbar-brand"  href="{%url 'home' %}"><img src="{% static 'img/logo2.jpg' %}"/></a>
+          <h3><a href="{% url 'home' %}">Лига киберспорта</a></h3>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li ><a href="{%url 'posts:list' %}">Blog</a></li>
-{#            <li><a href="{%url 'about' %}">About</a></li>#}
-{#            <li><a href="{%url 'contact' %}">Contact</a></li>#}
+           <li ><a href="{%url 'posts:list' %}">Новости</a></li>
+           <li><a href="#">Турниры</a></li>
+           <li><a href="#">Контакты</a></li>
             <!-- <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
               <ul class="dropdown-menu">

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 
 {% block title %}Create post | {{ block.super }}{% endblock %}
 {% block head_extra %}
@@ -7,17 +8,17 @@
 {% block content %}
 
 <div class="col-sm-6 ">
-<h1>Form is working</h1>
-    <div class="col-sm-2 ">
+<h1>Редактирование</h1>
+
 <form method="POST" action="" enctype="multipart/form-data">{% csrf_token %}
-{{ form.as_p }}
+{{ form|crispy }}
 <input type="submit" class="btn btn-defaul" value='Create post'/>
-    </div >
+
 </form>
     </div>
 
 <div class="col-sm-6">
-        <h1>Preview</h1>
+        <h1>Предпросмотр</h1>
 <div class="content-preview">
     <h3 id="preview-title"></h3>
     <p id="preview-content"></p>
