@@ -22,10 +22,21 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '#m+_ymhrs91v%6^t7y4m8!+01@7%dw^l^kiar3l+c1_8tza-wh'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+IS_PRODUCTION = False
+
+if IS_PRODUCTION:
+    DEBUG = True
+    CURRENT_HOST = 'http://lks.ru'
+    ALLOWED_HOSTS = ['http://lks.ru:8000', 'http://lks.ru', 'lks.ru',
+                     'http://lks.ru', 'lks.ru']
+else:
+    DEBUG = True
+    CURRENT_HOST = 'http://127.0.0.1:8000'
+    ALLOWED_HOSTS = ['http://127.0.0.1:8000']
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'accounts.User'
 
 # Application definition
 
@@ -89,10 +100,15 @@ WSGI_APPLICATION = 'src.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'lks',
+        'USER': 'kupchanski',
+        'PASSWORD': '11235853211',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
+
 
 
 # Password validation
@@ -119,7 +135,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Yekaterinburg'
 
 USE_I18N = True
 
@@ -141,3 +157,10 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, "static_cnd")
 MEDIA_ROOT = os.path.join(BASE_DIR, "media_cnd")
+
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'kup9python@gmail.com'
+EMAIL_HOST_PASSWORD = 'kirich3zippa3'
+EMAIL_SUBJECT_PREFIX = '[LKS-tournaments] '

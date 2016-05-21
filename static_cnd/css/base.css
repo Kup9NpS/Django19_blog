@@ -1,8 +1,21 @@
-h1{
-    color:#777777;
+.navbar-nav>li>a {
+    padding-top: 15px;
+    padding-bottom: 10px;
+    line-height: 50px;
+    font-size: 20px;
 }
-.navbar-default .navbar-brand:focus, .navbar-default .navbar-brand:hover {
-    color: #5e5e5e;
-    background-color: transparent;
-    margin-bottom: 50;
+.h3, h3 {
+    font-size: 30px;
+    margin-top: 10px;}
+
+.h1, .h2,  h1, h2 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+
+
+}
+
+.wmd-panel {
+    margin-right: 0px !important;
+    margin-left: 0px !important;
 }

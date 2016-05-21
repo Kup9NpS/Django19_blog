@@ -21,11 +21,13 @@ from posts.views import home
 
 urlpatterns = [
     url(r'^$', home, name='home'),
-    url(r'^admin/', admin.site.urls),
+    url(r'^admin/', include(admin.site.urls)),
     url(r'^posts/', include("posts.urls", namespace='posts')),
+    url(r'^user/', include("accounts.urls", namespace='accounts'))
     # url(r'$', home, name='home')
-
 ]
-if settings.DEBUG:
-    urlpatterns +=static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    urlpatterns +=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# if settings.DEBUG:
+#     urlpatterns +=static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+#     urlpatterns +=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
