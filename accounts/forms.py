@@ -15,11 +15,11 @@ class UserLoginForm(forms.Form):
     def clean(self,*args,**kwargs):
         email = self.cleaned_data.get('email')
         password = self.cleaned_data.get('password')
-        # user = authenticate(username=email, password=password)
+        user = authenticate(username=email, password=password)
         user_qs = User.objects.filter(email=email)
         if user_qs.count() == 1:
             user = user_qs.first()
-        if user and password:
+        if email and password:
             if not user:
                 raise forms.ValidationError('Пользователь не найден')
             if not user.check_password(password):
@@ -28,8 +28,6 @@ class UserLoginForm(forms.Form):
                 raise forms.ValidationError('Акктаунт дeактивирован. Обратитесь к администрации.')
             if user.banned:
                 raise forms.ValidationError('Акктаунт забанен. Обратитесь к администрации.')
-
-
 
 
 class UserResetPassForm(forms.Form):
@@ -107,7 +105,7 @@ class UserUpdateForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('avatar', 'first_name', 'last_name', 'sex', )
+        fields = ('avatar', 'first_name', 'last_name', 'nickname','bdate', 'sex', 'steam_name', 'battle_tag', 'lol_name')
         dateTimeOptions = {
             'format': 'dd.mm.yy',
             'autoclose': True,
@@ -136,9 +134,6 @@ class UserChangeForm(forms.ModelForm):
         fields = ('email', 'password', 'last_name', 'is_active', 'is_admin')
 
     def clean_password(self):
-        # Regardless of what the user provides, return the initial value.
-        # This is done here, rather than on the field, because the
-        # field does not have access to the initial value
         return self.initial["password"]
 
 

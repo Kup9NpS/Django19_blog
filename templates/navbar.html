@@ -30,32 +30,38 @@
 
           {% if request.user.is_authenticated %}
               <li>
-              <a href="#">Профиль</a>&nbsp;
+              <a href="{% url 'accounts:user_view' user.id  %}">Профиль</a>&nbsp;
 {#              {% avatar current_user.avatar height="40" width="40" circle="True" sex=user.sex thumbnail="False" %}#}
                  </li>
-              <li><a href="{%url 'accounts:logout_view' %}">Logout</a></li>
+              <li><a href="{%url 'accounts:logout_view' %}">Выйти</a></li>
             {% else %}
-            <li><a href="{%url 'accounts:reg_view' %}">Register</a></li>
+            <li><a href="{%url 'accounts:reg_view' %}">Регистрация</a></li>
+              {% if not request.user.is_authenticated and not "/accounts/login" in request.get_full_path  %}
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Войти <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+
+              <form class="navbar-form " method = "POST" action = "{% url 'accounts:login_view' %}">{% csrf_token %}
+                <div class='form-group'>
+                  <input type='text' class = 'form-control' name = "email" placeholder = "email"/>
+                </div>
+                <div class='form-group'>
+                  <input type='password' class = 'form-control' name = "password" placeholder = "password"/>
+                </div>
+                <button type='submit' class ='btn brn-default btn-block'> Login </button>
+              </form>
+              <p class = "text-center"> <a href= '{% url "accounts:resetpass" %}'> Забыли пароль?</a></p>
+                {% endif %}
+
+
+
+
+
           {% endif %}
           </ul>
 
 
-          {% if not request.user.is_authenticated and not "/accounts/login" in request.get_full_path  %}
 
-          <form class="navbar-form navbar-right" method = "POST" action = "{% url 'accounts:login_view' %}">{% csrf_token %}
-            <div class='form-group'>
-              <input type='text' class = 'form-control' name = "email" placeholder = "email"/>
-
-
-            </div>
-            <div class='form-group'>
-              <input type='password' class = 'form-control' name = "password" placeholder = "password"/>
-
-
-            </div>
-            <button type='submit' class ='btn brn-default'> Login </button>
-          </form>
-            {% endif %}
 
         </div><!--/.nav-collapse -->
       </div>

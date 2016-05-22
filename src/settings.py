@@ -34,7 +34,6 @@ else:
     CURRENT_HOST = 'http://127.0.0.1:8000'
     ALLOWED_HOSTS = ['http://127.0.0.1:8000']
 
-ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'accounts.User'
 
@@ -155,6 +154,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     #'/var/www/static/',
 ]
+
 STATIC_ROOT = os.path.join(BASE_DIR, "static_cnd")
 MEDIA_ROOT = os.path.join(BASE_DIR, "media_cnd")
 

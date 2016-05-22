@@ -1,10 +1,11 @@
-{% extends "base.html" %}
+{% extends "mail/mail_base.html" %}
 {% load staticfiles %}
-{% load crispy_forms_tags %}
 {% block content %}
 
     <div class="col-md-6 col-sm-offset-2">
-<h1>На почту отправлено сообщение, подтвердите смену пароля</h1>
+<h1>Привет!</h1><br/>
+<h3>На вашем аккаунте установлен временный пароль "{{ new_pass }}"</h3>
+<p>Пожалуйста, авторизуйтесь на сайте и установите новый пароль в настройках!</p>
 
 </div>
 {% endblock %}

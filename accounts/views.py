@@ -1,6 +1,6 @@
 # coding=utf-8
 import random
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core import signing
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
@@ -28,10 +28,13 @@ def login_view(request):
         email = request.POST.get('email', '')
         password = request.POST.get('password', '')
         user = auth.authenticate(username=email, password=password)
-        if user:
-            if not user.banned and user.is_active:
-                auth.login(request, user)
-                return redirect('/')
+        if email and password:
+            if user:
+                if not user.banned and user.is_active:
+                    auth.login(request, user)
+                    return redirect('/')
+                else:
+                    return shortcut()
             else:
                 return shortcut()
         else:
@@ -61,10 +64,7 @@ def register_view(request):
                                             request_time=timezone.now())
             new_activation.save()
             mail_sending.confirm_email(email, activation_key)
-            user = auth.authenticate(username=email, password=password)
-            auth.login(request, user)
-
-            return redirect('/')
+            return render(request, 'accounts/activation.html', {'form': form})
         else:
             messages.warning(request, "Здесь есть неверно заполненные поля!")
             return render(request, 'accounts/register.html', {'form': form})
@@ -85,98 +85,71 @@ def register_confirm(request, activation_key):
             user.backend = 'django.contrib.auth.backends.ModelBackend'
             auth.login(request, user)
         return render(request, 'accounts/confirm_reg.html', {})
-#
-#
-# def user_view(request, user_id):
-#     try:
-#         user = User.objects.get(id=user_id)
-#     except ObjectDoesNotExist:
-#         raise Http404("Такого пользователя не существует")
-#     context = {'user': user}
-#
-#     if request.user.pk == user.pk:
-#         context['current'] = True
-#     return render(request, 'user.html', context)
-#
-#
-# def users_view(request):
-#     try:
-#         query = request.GET.__getitem__('q')
-#         users = User.objects.filter(first_name__icontains=query) | User.objects.filter(last_name__icontains=query) | User.objects.filter(phone__icontains=query)
-#         context = {'users': users, 'query': query}
-#     except KeyError:
-#         context = {'users': User.objects.all().order_by('-last_login')}
-#     return render(request, 'users.html', context)
-#
-#
-# @login_required
-# def user_update_view(request):
-#     user = User.objects.get(email=request.user.email)
-#     form = UserUpdateForm(request.POST or None, request.FILES or None, instance=user)
-#
-#     if 'code' in request.GET:
-#         code = request.GET['code']
-#         try:
-#             access_token, user_id = vkontakte.auth_code(code, reverse('user_update_view'))
-#         except vkontakte.AuthError as e:
-#             messages.warning(request, u'Ошибка OAUTH авторизации {}'.format(e), extra_tags='integration')
-#             return redirect('user_update_view')
-#         try:
-#             user = User.objects.get(vkuserid=user_id)
-#             messages.warning(request, 'Этот аккаунт ВКонтакте уже связан с профилем', extra_tags='integration')
-#             return redirect('user_update_view')
-#         except User.DoesNotExist:
-#             user = User.objects.get(email=request.user.email)
-#             user.vkuserid = user_id
-#             user.save()
-#             messages.success(request, "Профиль ВКонтакте прикреплен", extra_tags='integration')
-#             return redirect('user_update_view')
-#
-#     elif request.POST:
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, "Успешно сохранено!", extra_tags='info')
-#             return redirect('user_update_view')
-#         else:
-#             messages.warning(request, "Некорректные данные", extra_tags='info')
-#     return render(request, 'user_update.html', {'form': form, 'pass_form': ChangePasswordForm})
-#
-#
-# @login_required
-# def changepass(request):
-#     user = User.objects.get(email=request.user.email)
-#     pass_form = ChangePasswordForm(request.POST or None)
-#     if request.method == 'POST':
-#         if pass_form.is_valid():
-#             password = pass_form.cleaned_data.get("password")
-#             user.set_password(password)
-#             user.save()
-#             validation = auth.authenticate(username=user.email, password=password)
-#             auth.login(request, validation)
-#             messages.success(request, "Пароль изменен", extra_tags='changepass')
-#         else:
-#             messages.warning(request, "Введенные пароли некорректны!", extra_tags='changepass')
-#     return redirect('user_update_view')
-#
-#
-# @login_required
-# def unsetvkid(request):
-#     user = User.objects.get(email=request.user.email)
-#     user.vkuserid = None
-#     user.save()
-#     messages.success(request, "Профиль ВКонтакте откреплен", extra_tags='integration')
-#     return redirect('user_update_view')
-#
-#
-# def resetpass(request):
-#     form = UserResetPassForm(request.POST or None)
-#     if request.method == 'POST':
-#         if form.is_valid():
-#             email = form.cleaned_data['email']
-#             new_pass = str(random.randint(100000, 999999))
-#             user = User.objects.get(email=email)
-#             user.set_password(new_pass)
-#             user.save()
-#             mailing.resetpass_email(email, new_pass)
-#             messages.success(request, "Пароль изменен. Письмо отправлено на почту!")
-#     return render(request, 'resetpass.html')
+
+
+def user_view(request, user_id=None):
+    user = get_object_or_404(User, id=user_id)
+    current = False
+    if request.user.id == user.id:
+        current = True
+    context = {
+        'user': user,
+        'current': current
+    }
+    return render(request, 'accounts/user_profile.html', context)
+
+
+def users_view(request):
+    try:
+        query = request.GET.__getitem__('q')
+        users = User.objects.filter(first_name__icontains=query) | User.objects.filter(last_name__icontains=query) | User.objects.filter(phone__icontains=query)
+        context = {'users': users, 'query': query}
+    except KeyError:
+        context = {'users': User.objects.all().order_by('-last_login')}
+    return render(request, 'accounts/users_list.html', context)
+
+
+@login_required
+def user_update_view(request, user_id=None):
+    user = User.objects.get(id=user_id)
+    form = UserUpdateForm(request.POST or None, request.FILES or None, instance=user)
+    if form.is_valid():
+        form.save()
+        messages.success(request, "Успешно сохранено!", extra_tags='info')
+        return redirect('accounts:user_view', user.id)
+    else:
+        messages.warning(request, "Некорректные данные", extra_tags='info')
+    return render(request, 'accounts/user_edit.html', {'user': user, 'form': form, })
+
+
+@login_required
+def changepass(request):
+    user = User.objects.get(email=request.user.email)
+    pass_form = ChangePasswordForm(request.POST or None)
+    if pass_form.is_valid():
+        if pass_form.clean_password1():
+            password = pass_form.clean_password1()
+            user.set_password(password)
+            user.save()
+            validation = auth.authenticate(username=user.email, password=password)
+            auth.login(request, validation)
+            messages.success(request, "Пароль изменен", extra_tags='changepass')
+            return redirect('accounts:user_view', user.id)
+        else:
+            return render(request, 'accounts/change_pass.html', {'user': user, 'form': pass_form})
+    else:
+        messages.warning(request, "Введенные пароли некорректны!", extra_tags='changepass')
+    return render(request, 'accounts/change_pass.html', {'user': user, 'form': pass_form})
+
+
+def resetpass(request):
+    form = UserResetPassForm(request.POST or None)
+    if form.is_valid():
+        email = form.cleaned_data['email']
+        new_pass = str(random.randint(100000, 999999))
+        user = User.objects.get(email=email)
+        user.set_password(new_pass)
+        user.save()
+        mail_sending.resetpass_email(email, new_pass)
+        messages.success(request, "Пароль изменен. Письмо отправлено на почту!")
+    return render(request, 'accounts/resetpass.html', {'form': form})

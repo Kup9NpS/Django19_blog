@@ -47,18 +47,24 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
                                    help_text="Админ сайта, доступ в админку")
     banned = models.BooleanField('Забанен', default=False,
                                  help_text="Забанить игрока на сайте")
+    is_captain = models.BooleanField('Капитан', default=False,
+                                 help_text="Является ли капитаном команды")
+    nickname = models.CharField('Никнейм', max_length=20, default="nameless")
     avatar = models.ImageField(upload_to='avatars', blank=True, null=True, verbose_name='Аватар')
     date_joined = models.DateTimeField('Дата регистрации', default=timezone.now)
     bdate = models.DateField('Дата рождения', auto_now_add=False, blank=True, null=True)
     first_name = models.CharField('Имя', max_length=120)
     last_name = models.CharField('Фамилия', max_length=120)
     sex = models.CharField(max_length=1, choices=(('m', 'мужской'), ('f', 'женский')), verbose_name='Пол')
+    steam_name = models.CharField(max_length=50, default=' ', blank=True, null=True)
+    battle_tag = models.CharField(max_length=50, default=' ', blank=True, null=True)
+    lol_name = models.CharField(max_length=50, default=' ', blank=True, null=True)
 
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
-    REGISTRATION_FIELDS = ['first_name', 'last_name'] + ['sex']  + ['bdate'] +  [USERNAME_FIELD]
+    REGISTRATION_FIELDS = ['first_name', 'last_name'] + ['nickname'] + ['sex'] + ['bdate'] + [USERNAME_FIELD]
 
     class Meta:
         verbose_name = 'Игрок'

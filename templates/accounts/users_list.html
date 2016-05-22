@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <div class="col-md-6 col-sm-offset-2">
+<h1 class="col-sm-offset-3"> Список игроков</h1>
+{%  for user in users %}
+    <div class="thumbnail">
+    <ul>
+    {{ user.nickname }}<br/>
+    <a href="{% url "accounts:user_view" user.id %}">
+        {% if user.avatar %}<img src='{{ user.avatar.url }}' class='img-responsive'>
+        {% else %}Профиль
+        {% endif %}</a>
+    </ul>
+</div>
+{% endfor %}
+</div>
+{% endblock %}

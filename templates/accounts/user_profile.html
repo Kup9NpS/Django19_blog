@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}{{ user }}{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-4 col-sm-4 col-xs-4">
+    <div class="thumbnail profile-avatar">
+      <div class="avatar-parent">
+      {% if user.avatar %}
+        <img src="{{ user.avatar.url }}" class="img-responsive"/>
+      {% endif %}
+        {% if  current %}
+        <div class="avatar-edit"><a href="#">Выбрать другой аватар</a></div>
+        {% endif %}
+      </div>
+    </div>{% if not user.is_active %}<a class="btn btn-warning btn-block">Профиль не активирован</a>{% endif %}
+  </div>
+  <div class="col-md-8 col-sm-8 col-xs-8">
+    <ul>{{ user.first_name  }}
+      {{ user.last_name  }}<br/>
+        {{ user.nickname }}<br/>
+      {{ user.bdate  }}<br/>
+      {{ user.sex  }}<br/>
+      {{ user.steam_name  }}<br/>
+      {{ user.battle_tag }}<br/>
+      {{ user.lol_name  }}<br/></ul>
+      {% if current %}
+        <div class="profile-edit"><a href={% url "accounts:user_edit_view" user.id %}>Редактировать профиль</a></div>
+           <div class="profile-edit"><a href={% url "accounts:changepass"  %}>Сменить пароль</a></div>
+        {% endif %}
+
+</div>
+</div>
+{% endblock %}
