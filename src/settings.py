@@ -163,5 +163,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media_cnd")
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'kup9python@gmail.com'
-EMAIL_HOST_PASSWORD = 'kirich3zippa3'
+EMAIL_HOST_PASSWORD = '******'
 EMAIL_SUBJECT_PREFIX = '[LKS-tournaments] '
