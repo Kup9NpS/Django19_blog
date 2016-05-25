@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     # my apps
     'posts',
     'accounts',
+    'teams',
     # 3rd party
     'pagedown',
     'markdown_deux',

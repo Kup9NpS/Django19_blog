@@ -23,7 +23,8 @@ urlpatterns = [
     url(r'^$', home, name='home'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^posts/', include("posts.urls", namespace='posts')),
-    url(r'^user/', include("accounts.urls", namespace='accounts'))
+    url(r'^user/', include("accounts.urls", namespace='accounts')),
+    url(r'^teams/', include("teams.urls", namespace='teams'))
     # url(r'$', home, name='home')
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

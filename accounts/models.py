@@ -48,7 +48,9 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
     banned = models.BooleanField('Забанен', default=False,
                                  help_text="Забанить игрока на сайте")
     is_captain = models.BooleanField('Капитан', default=False,
-                                 help_text="Является ли капитаном команды")
+                                     help_text="Является ли капитаном команды")
+    is_inteam = models.BooleanField('В команде', default=False,
+                                    help_text="Состоит ли в команде")
     nickname = models.CharField('Никнейм', max_length=20, default="nameless")
     avatar = models.ImageField(upload_to='avatars', blank=True, null=True, verbose_name='Аватар')
     date_joined = models.DateTimeField('Дата регистрации', default=timezone.now)
@@ -59,6 +61,8 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
     steam_name = models.CharField(max_length=50, default=' ', blank=True, null=True)
     battle_tag = models.CharField(max_length=50, default=' ', blank=True, null=True)
     lol_name = models.CharField(max_length=50, default=' ', blank=True, null=True)
+
+
 
     objects = UserManager()
 
