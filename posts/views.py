@@ -94,8 +94,8 @@ def post_delete(request, slug=None):
 
 
 def home(request):
-    title ='Войти как гость'
+    queryset_list = Post.objects.all()[:3]
     context = {
-    "title": title,
+        'blogs':queryset_list
     }
     return render(request, "home.html", context)

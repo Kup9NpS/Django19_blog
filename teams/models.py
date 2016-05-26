@@ -29,17 +29,30 @@ class Teams(models.Model):
         try:
             TeamPlayer.objects.get(user=self.captain_user)
         except TeamPlayer.DoesNotExist:
-            TeamPlayer.objects.create(team=self, user=self.captain_user, role='captain', action=SUBSCRIBED)
+            TeamPlayer.objects.create(team=self, user=self.captain_user, role='captain', action=INTEAM)
+
+    def add_player(self, current_user, role):
+        if not current_user.is_inteam:
+            TeamPlayer.objects.create(team=self, user=current_user, role=role, action=INTEAM)
+        else:
+            pass
+
+    def all_team(self):
+        teammates = TeamPlayer.objects.filter(team=self).filter(action=TeamPlayer.INTEAM)
+        users = list()
+        for mate in teammates:
+            users.append(mate.user)
+        return users
 
 
 INVITED = 1
-SUBSCRIBED = 2
-UNSUBSCRIBED = 3
+INTEAM = 2
+LEAVED = 3
 
 
 ACTIONS = (
-          (SUBSCRIBED, 'Вступил в команду'),
-          (UNSUBSCRIBED, 'Вышел из команды'),
+          (INTEAM, 'Вступил в команду'),
+          (LEAVED, 'Вышел из команды'),
           (INVITED, 'Приглашен в команду'),
     )
 
