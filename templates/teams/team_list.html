@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% block content %}
+ <div class="col-sm-8 col-sm-offset-2">
+ <h1> Команды</h1>
+<form method="get" action="">
+    <div class="input-group">
+        <input class="form-control" type="text" name='q' placeholder="Search team or player" value="{{ request.GET.q }}">
+        <span class="input-group-btn">
+            <input class="btn btn-default" type="submit" value="Search">
+        </span>
+    </div>
+
+</form>
+{% for obj in object_list %}
+    <div class="row">
+     <div class="col-sm-12">
+    <div class="thumbnail">
+        {% if obj.logo %}
+    <img src="{{ obj.logo.url }}" class="img-responsive ">
+        {% endif %}
+      <div class="caption post_detail_item">
+        <h3><a href='{% url "teams:team_detail_view" obj.id  %}'>{{ obj.title}}</a> <small>Изменена: {{ obj.timestamp }}</small></h3>
+      </div>
+    </div>
+  </div>
+<hr/>
+    </div>
+{% endfor %}
+
+<div class="pagination">
+    <span class="step-links">
+        {% if object_list.has_previous %}
+            <a href="?page={{ object_list.previous_page_number }}&q={{ request.GET.q }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.
+        </span>
+
+        {% if object_list.has_next %}
+            <a href="?page={{ object_list.next_page_number }}&q={{ request.GET.q }}">next</a>
+        {% endif %}
+    </span>
+</div>
+
+ </div>
+{% endblock %}

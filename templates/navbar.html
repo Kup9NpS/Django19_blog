@@ -2,13 +2,13 @@
 <nav class="navbar navbar-default navbar-static-top">
       <div class="container">
         <div class="navbar-header">
-          <a style="margin-bottom: 30;" class="navbar-brand"  href="{%url 'home' %}"><img src="{% static 'img/logo2.jpg' %}"/></a>
-          <h3><a href="{% url 'home' %}">Лига киберспорта</a></h3>
+          <a style="margin-bottom: 20;" class="navbar-brand"  href="{%url 'home' %}"><img src="{% static 'img/logo2.jpg' %}"/></a>
         </div>
         <li id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
            <li ><a href="{%url 'posts:list' %}">Новости</a></li>
            <li><a href="#">Турниры</a></li>
+           <li><a href="{% url "teams:list_view" %}">Команды</a></li>
            <li><a href="#">Контакты</a></li>
             <!-- <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
@@ -33,10 +33,15 @@
               <a href="{% url 'accounts:user_view' user.id  %}">Профиль</a>&nbsp;
 {#              {% avatar current_user.avatar height="40" width="40" circle="True" sex=user.sex thumbnail="False" %}#}
                  </li>
+              {% if user.is_inteam %}
+              <li><a href="{% url 'teams:team_view' user.id %}">Моя команда</a>&nbsp;</li>
+                  {% elif  not "/teams/" in request.get_full_path  %}
+                  <li><a href="#">Создать команду</a>&nbsp;</li>
+                  {% endif %}
               <li><a href="{%url 'accounts:logout_view' %}">Выйти</a></li>
             {% else %}
             <li><a href="{%url 'accounts:reg_view' %}">Регистрация</a></li>
-              {% if not request.user.is_authenticated and not "/accounts/login" in request.get_full_path  %}
+              {% if not request.user.is_authenticated and not "/user/login" in request.get_full_path  %}
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Войти <span class="caret"></span></a>
                   <ul class="dropdown-menu">

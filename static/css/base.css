@@ -1,11 +1,13 @@
 .navbar-nav>li>a {
-    padding-top: 15px;
+    padding-top: 20px;
     padding-bottom: 10px;
-    line-height: 50px;
+    line-height: 20px;
     font-size: 14px;
 
 }
-
+div.team-edit a{
+    color: black;
+}
 .h3, h3 {
     font-size: 30px;
     margin-top: 10px;}

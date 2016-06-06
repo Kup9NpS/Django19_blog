@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.db.models import  Q
 from .models import Post
 from .forms import PostForm
+from teams.models import Teams
 
 
 # Create your views here.

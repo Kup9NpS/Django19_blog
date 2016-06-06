@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin
 from .models import User, UserActivation
-from .forms import UserChangeForm, UserCreationForm
+
 
 
 # class UserGameActionInline(admin.TabularInline):

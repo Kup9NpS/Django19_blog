@@ -10,21 +10,18 @@
       {% if user.avatar %}
         <img src="{{ user.avatar.url }}" class="img-responsive"/>
       {% endif %}
-        {% if  current %}
-        <div class="avatar-edit"><a href="#">Выбрать другой аватар</a></div>
-        {% endif %}
       </div>
     </div>{% if not user.is_active %}<a class="btn btn-warning btn-block">Профиль не активирован</a>{% endif %}
   </div>
   <div class="col-md-8 col-sm-8 col-xs-8">
-    <ul>{{ user.first_name  }}
-      {{ user.last_name  }}<br/>
-        {{ user.nickname }}<br/>
-      {{ user.bdate  }}<br/>
-      {{ user.sex  }}<br/>
-      {{ user.steam_name  }}<br/>
-      {{ user.battle_tag }}<br/>
-      {{ user.lol_name  }}<br/></ul>
+    <ul><h1>{{ user.first_name  }}
+      {{ user.last_name  }}</h1><br/>
+        <b>Никнейм пользователя: </b> {{ user.nickname }}<br/>
+      <b>Дата рождения:</b> {{ user.bdate  }}<br/>
+      <b>Пол:</b>{% if user.sex == 'm' %} Мужской {% else %} Женский {% endif %}<br/>
+      <b>Steam id: </b>{{ user.steam_name  }}<br/>
+     <b> Battletag:</b> {{ user.battle_tag }}<br/>
+      <b>Lol name:</b> {{ user.lol_name  }}<br/></ul>
       {% if current %}
         <div class="profile-edit"><a href={% url "accounts:user_edit_view" user.id %}>Редактировать профиль</a></div>
            <div class="profile-edit"><a href={% url "accounts:changepass"  %}>Сменить пароль</a></div>

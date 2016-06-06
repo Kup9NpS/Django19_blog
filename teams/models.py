@@ -25,24 +25,24 @@ class Teams(models.Model):
     def __str__(self):
         return 'Команда №{} - {}'.format(self.id, self.title)
 
+    def invite_player(self, current_user):
+        if not current_user.is_inteam:
+            TeamPlayer.objects.create(team=self, user=current_user,  action=INVITED)
+        else:
+            pass
+
     def add_captain_in_team(self):
         try:
             TeamPlayer.objects.get(user=self.captain_user)
         except TeamPlayer.DoesNotExist:
-            TeamPlayer.objects.create(team=self, user=self.captain_user, role='captain', action=INTEAM)
+            TeamPlayer.objects.create(team=self, user=self.captain_user,  action=INTEAM)
 
-    def add_player(self, current_user, role):
+    def add_player(self, current_user):
         if not current_user.is_inteam:
-            TeamPlayer.objects.create(team=self, user=current_user, role=role, action=INTEAM)
+            TeamPlayer.objects.create(team=self, user=current_user,  action=INTEAM)
         else:
             pass
 
-    def all_team(self):
-        teammates = TeamPlayer.objects.filter(team=self).filter(action=TeamPlayer.INTEAM)
-        users = list()
-        for mate in teammates:
-            users.append(mate.user)
-        return users
 
 
 INVITED = 1
@@ -60,7 +60,6 @@ ACTIONS = (
 class TeamPlayer(models.Model):
     team = models.ForeignKey('Teams', verbose_name='Команда')
     user = models.ForeignKey('accounts.User', verbose_name='Игрок')
-    role = models.CharField(max_length=120)
     action = models.PositiveSmallIntegerField(verbose_name='Действие', choices=ACTIONS)
     timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
 

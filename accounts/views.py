@@ -19,8 +19,8 @@ from django.core.files import File
 
 @csrf_protect
 def login_view(request):
-    # if request.user.is_authenticated():
-    #     return redirect('index_view')
+    if request.user.is_authenticated():
+        return redirect('/')
     template = 'accounts/login.html'
     shortcut = lambda: render(request, template, {"form": form})
     form = UserLoginForm(request.POST or None)

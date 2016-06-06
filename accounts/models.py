@@ -62,8 +62,6 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
     battle_tag = models.CharField(max_length=50, default=' ', blank=True, null=True)
     lol_name = models.CharField(max_length=50, default=' ', blank=True, null=True)
 
-
-
     objects = UserManager()
 
     USERNAME_FIELD = 'email'

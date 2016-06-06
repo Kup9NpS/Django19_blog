@@ -12,7 +12,7 @@ class UserLoginForm(forms.Form):
     email = forms.EmailField(label='Email', max_length=150)
     password = forms.CharField(label='Password', widget=forms.PasswordInput())
 
-    def clean(self,*args,**kwargs):
+    def clean(self, *args, **kwargs):
         email = self.cleaned_data.get('email')
         password = self.cleaned_data.get('password')
         user = authenticate(username=email, password=password)
@@ -21,13 +21,14 @@ class UserLoginForm(forms.Form):
             user = user_qs.first()
         if email and password:
             if not user:
-                raise forms.ValidationError('Пользователь не найден')
+                raise forms.ValidationError('Неверное сочетание Email/Password')
             if not user.check_password(password):
-                raise forms.ValidationError('Введите верный пароль')
+                raise forms.ValidationError('Неверное сочетание Email/Password')
             if not user.is_active:
                 raise forms.ValidationError('Акктаунт дeактивирован. Обратитесь к администрации.')
             if user.banned:
                 raise forms.ValidationError('Акктаунт забанен. Обратитесь к администрации.')
+        return self.cleaned_data
 
 
 class UserResetPassForm(forms.Form):
@@ -76,31 +77,6 @@ class UserRegistrationForm(forms.ModelForm):
         return user
 
 
-class UserCreationForm(forms.ModelForm):
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
-
-    class Meta:
-        model = User
-        fields = ('email', 'last_name')
-
-    def clean_password2(self):
-        # Check that the two password entries match
-        password1 = self.cleaned_data.get("password1")
-        password2 = self.cleaned_data.get("password2")
-        if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("Passwords don't match")
-        return password2
-
-    def save(self, commit=True):
-        # Save the provided password in hashed format
-        user = super(UserCreationForm, self).save(commit=False)
-        user.set_password(self.cleaned_data["password1"])
-        if commit:
-            user.save()
-        return user
-
-
 class UserUpdateForm(forms.ModelForm):
 
     class Meta:
@@ -126,18 +102,8 @@ class UserUpdateForm(forms.ModelForm):
         return self.initial["password"]
 
 
-class UserChangeForm(forms.ModelForm):
-    password = ReadOnlyPasswordHashField()
-
-    class Meta:
-        model = User
-        fields = ('email', 'password', 'last_name', 'is_active', 'is_admin')
-
-    def clean_password(self):
-        return self.initial["password"]
-
-
 class ChangePasswordForm(forms.Form):
+    password_old = forms.CharField(label='Старый Пароль', widget=forms.PasswordInput)
     password = forms.CharField(label='Новый пароль', widget=forms.PasswordInput())
     password1 = forms.CharField(label='Еще раз', widget=forms.PasswordInput())
 
