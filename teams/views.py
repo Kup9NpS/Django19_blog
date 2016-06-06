@@ -38,7 +38,7 @@ def team_list_view(request):
 def team_detail_view(request, team_id=None):
     current = False
     teams = get_object_or_404(Teams, id=team_id)
-    players = TeamPlayer.objects.filter(team__title=teams.title, user__is_inteam=True, action=2)
+    players = TeamPlayer.objects.filter(team__title=teams.title, user__is_inteam=True, action=TeamPlayer.INTEAM)
     context = {
             'team':teams,
             'players':players,
@@ -52,7 +52,7 @@ def profile_team_view(request, user_id=None):
     if request.user.is_authenticated():
         player = get_object_or_404(TeamPlayer, user__id=user_id)
         team = get_object_or_404(Teams, title=player.team.title)
-        players = TeamPlayer.objects.filter(team__title=team.title, user__is_inteam=True, action=2)
+        players = TeamPlayer.objects.filter(team__title=team.title, user__is_inteam=True, action=TeamPlayer.INTEAM)
         if request.user.pk == player.user.id:
             current = True
         context = {
@@ -69,22 +69,42 @@ def profile_team_view(request, user_id=None):
 def team_update_view(request, user_id=None):
     player = get_object_or_404(TeamPlayer, user__id=user_id)
     form = TeamUpdateForm(request.POST or None, request.FILES or None, instance=player.team)
+    players = TeamPlayer.objects.filter(team__title=player.team.title, action=TeamPlayer.INVITED)
+    context = {
+        'player': player,
+        'form': form,
+        'players':players,
+    }
     if form.is_valid():
         form.save()
         return redirect('teams:team_view', player.user.id)
     else:
         messages.warning(request, "Некорректные данные", extra_tags='info')
-    return render(request, 'teams/team_edit.html', {'user': player, 'form': form, })
+    return render(request, 'teams/team_edit.html', context)
 
 @login_required
 def invite_user_in_team(request, team_id=None):
-    teams = get_object_or_404(Teams, id=team_id)
-    new_player = Teams.invite_player(current_user=request.user)
-    return redirect('/')
+    team = get_object_or_404(Teams, id=team_id)
+    TeamPlayer.objects.create(team=team, user=request.user, action=TeamPlayer.INVITED)
+    return render(request, 'teams/invite_view.html', {})
 
 
+def add_user_in_team(request, team_id=None):
+    team = get_object_or_404(Teams, id=team_id)
+    player = TeamPlayer.objects.filter(team__title=team.title, action=TeamPlayer.INVITED).first()
+    player.action = TeamPlayer.INTEAM
+    player.user.is_inteam = True
+    player.user.save()
+    player.save()
+    return redirect("teams:team_update_view", request.user.id)
 
-def add_user_in_team(request):
 
-    pass
+def delete_user_from_team(request, team_id=None):
+    team = get_object_or_404(Teams, id=team_id)
+    player = TeamPlayer.objects.filter(team__title=team.title, action=TeamPlayer.INVITED).first()
+    player.action = TeamPlayer.LEAVED
+    player.user.is_inteam = False
+    player.user.save()
+    player.delete()
+    return redirect("teams:team_update_view", request.user.id)
 

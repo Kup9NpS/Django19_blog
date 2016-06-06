@@ -9,10 +9,17 @@
 
 <form method="POST" action="" enctype="multipart/form-data">{% csrf_token %}
 {{ form|crispy }}
-<input type="submit" class="btn btn-defaul" value='Create post'/>
+<input type="submit" class="btn btn-defaul" value='Сохранить'/>
 
 </form>
     </div>
-
+<div class="col-sm-6 ">
+{% for mate in players %}
+    <li><a href="{% url 'accounts:user_view' mate.user.id%}">{{ mate.user.nickname }}</a></li>
+    <div class=" team-edit btn  btn-primary">
+    <a href="{% url 'teams:add_view' player.team.id %}">Добавить в команду</a></div>
+    <div class=" team-edit btn  btn-warning"><a href="{% url 'teams:delete_view' player.team.id %}">Отклонить заявку</a></div>
+{% endfor %}
+</div>
 
 {%  endblock %}

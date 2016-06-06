@@ -25,11 +25,6 @@ class Teams(models.Model):
     def __str__(self):
         return 'Команда №{} - {}'.format(self.id, self.title)
 
-    def invite_player(self, current_user):
-        if not current_user.is_inteam:
-            TeamPlayer.objects.create(team=self, user=current_user,  action=INVITED)
-        else:
-            pass
 
     def add_captain_in_team(self):
         try:
@@ -37,11 +32,7 @@ class Teams(models.Model):
         except TeamPlayer.DoesNotExist:
             TeamPlayer.objects.create(team=self, user=self.captain_user,  action=INTEAM)
 
-    def add_player(self, current_user):
-        if not current_user.is_inteam:
-            TeamPlayer.objects.create(team=self, user=current_user,  action=INTEAM)
-        else:
-            pass
+
 
 
 
@@ -68,6 +59,18 @@ class TeamPlayer(models.Model):
         verbose_name_plural = 'Игроки'
         app_label = 'teams'
         unique_together = ("team", "user")
+
+    INVITED = 1
+    INTEAM = 2
+    LEAVED = 3
+
+
+    ACTIONS = (
+          (INTEAM, 'Вступил в команду'),
+          (LEAVED, 'Вышел из команды'),
+          (INVITED, 'Приглашен в команду'),
+    )
+
 
     def __str__(self):
         return 'Игрок {} - {}'.format(self.user.nickname, self.team.title)

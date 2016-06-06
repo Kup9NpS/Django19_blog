@@ -10,24 +10,20 @@
 
     <h3>Состав команды:</h3><br/>
         {% for mate in players %}
-  <p>{{ mate.user.nickname }} -
-            {% if mate.user.is_captain %}
-                <strong>{{ mate.role }}</strong>{% else %}
-                {{ mate.role }}
-            {% endif %}
- </p>
+ <a href="{% url 'accounts:user_view' mate.user.id%}">{{ mate.user.first_name }} {{ mate.user.last_name }} - {{ mate.user.nickname }} </a> <br/>
 
     {% endfor %}
     <div>
+    <br/>
     {% if current and player.user.is_captain %}
         <div class="team-edit btn btn-block btn-primary"><a href="{% url 'teams:team_update_view' user.id %}">Редактировать команду</a></div>
     {% endif %}
-    {% if current and not player.user.is_captain%}
+    {% if current and not player.user.is_captain %}
         <div class="team-edit btn btn-block  btn-danger"><a href="#">Выйти из команды</a></div>
     {% endif %}
     </div>
-{% if current  %}
-        <div class="team-edit btn btn-block btn-primary"><a href="{% url 'teams:invite_view' player.team.id %}">Подать заявку на вступлениеу</a></div>
+{% if not player.user.is_inteam  %}
+        <div class="team-edit btn btn-block btn-primary"><a href="{% url 'teams:invite_view' team.id %}">Подать заявку на вступлениеу</a></div>
     {% endif %}
 </div>
 
