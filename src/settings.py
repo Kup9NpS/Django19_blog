@@ -26,9 +26,9 @@ IS_PRODUCTION = True
 
 if IS_PRODUCTION:
     DEBUG = True
-    CURRENT_HOST = 'http://lks.ru'
-    ALLOWED_HOSTS = ['http://lks.ru:8000', 'http://lks.ru', 'lks.ru',
-                     'http://lks.ru', 'lks.ru']
+    CURRENT_HOST = 'Kupchanski.pythonanywhere.com'
+    ALLOWED_HOSTS = ['http://Kupchanski.pythonanywhere.com:8000', 'http://Kupchanski.pythonanywhere.com', 'Kupchanski.pythonanywhere.com',
+                     'http://Kupchanski.pythonanywhere.com', 'Kupchanski.pythonanywhere.com']
 else:
     DEBUG = True
     CURRENT_HOST = 'http://127.0.0.1:8000'
