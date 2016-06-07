@@ -132,11 +132,11 @@ def delete_user_from_team(request, user_id=None):
 
 def team_create_view(request, user_id=None):
     user = get_object_or_404(User, id=user_id)
-    user.is_inteam = True
-    user.is_captain = True
-    user.save()
     form = TeamCreateForm(request.POST or None, request.FILES or None)
     if form.is_valid():
+        user.is_inteam = True
+        user.is_captain = True
+        user.save()
         logo = form.cleaned_data['logo']
         title = form.cleaned_data['title']
         team = Teams.objects.create(title=title, logo=logo, captain_user=user)

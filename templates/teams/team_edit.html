@@ -12,6 +12,7 @@
 <input type="submit" class="btn btn-defaul" value='Сохранить'/>
 
 </form>
+{% if '/create/' in request.get_full_path %}
 <div class="col-sm-6 ">
 <h1> Состав команды:</h1> <br/>
 {% for mates in players_inteam %}
@@ -27,5 +28,6 @@
     <div class=" team-edit btn  btn-warning"><a href="{% url 'teams:reject_view' player.team.id %}">Отклонить заявку</a></div>
 {% endfor %}
 </div>
+{% endif %}
 
 {%  endblock %}
