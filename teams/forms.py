@@ -8,3 +8,8 @@ class TeamUpdateForm(forms.ModelForm):
         model = Teams
         fields = ('logo', 'title')
 
+class TeamCreateForm(forms.ModelForm):
+
+    class Meta:
+        model = Teams
+        fields = ('logo', 'title',)

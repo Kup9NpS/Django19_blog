@@ -4,7 +4,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 from .models import TeamPlayer, Teams
-from .forms import TeamUpdateForm
+from .forms import TeamUpdateForm, TeamCreateForm
+from accounts.models import User
 from django.http import Http404
 from django.db.models import  Q
 
@@ -67,13 +68,17 @@ def profile_team_view(request, user_id=None):
 
 
 def team_update_view(request, user_id=None):
+    if not request.user.is_captain:
+        raise Http404
     player = get_object_or_404(TeamPlayer, user__id=user_id)
     form = TeamUpdateForm(request.POST or None, request.FILES or None, instance=player.team)
     players = TeamPlayer.objects.filter(team__title=player.team.title, action=TeamPlayer.INVITED)
+    players_inteam = TeamPlayer.objects.filter(team__title=player.team.title, action=TeamPlayer.INTEAM)
     context = {
         'player': player,
         'form': form,
         'players':players,
+        'players_inteam':players_inteam,
     }
     if form.is_valid():
         form.save()
@@ -85,7 +90,9 @@ def team_update_view(request, user_id=None):
 @login_required
 def invite_user_in_team(request, team_id=None):
     team = get_object_or_404(Teams, id=team_id)
-    TeamPlayer.objects.create(team=team, user=request.user, action=TeamPlayer.INVITED)
+    player = TeamPlayer.objects.create(team=team, user=request.user, action=TeamPlayer.INVITED)
+    player.user.is_inteam = True
+    player.user.save()
     return render(request, 'teams/invite_view.html', {})
 
 
@@ -93,18 +100,61 @@ def add_user_in_team(request, team_id=None):
     team = get_object_or_404(Teams, id=team_id)
     player = TeamPlayer.objects.filter(team__title=team.title, action=TeamPlayer.INVITED).first()
     player.action = TeamPlayer.INTEAM
-    player.user.is_inteam = True
-    player.user.save()
     player.save()
     return redirect("teams:team_update_view", request.user.id)
 
 
-def delete_user_from_team(request, team_id=None):
+def reject_user_from_team(request, team_id=None):
     team = get_object_or_404(Teams, id=team_id)
     player = TeamPlayer.objects.filter(team__title=team.title, action=TeamPlayer.INVITED).first()
-    player.action = TeamPlayer.LEAVED
     player.user.is_inteam = False
+    player.user.is_captain = False
     player.user.save()
     player.delete()
-    return redirect("teams:team_update_view", request.user.id)
+    if request.user.is_captain:
+        return redirect("teams:team_update_view", request.user.id)
+    else:
+        return redirect("teams:list_view")
 
+
+def delete_user_from_team(request, user_id=None):
+    user = get_object_or_404(User, id=user_id)
+    player = TeamPlayer.objects.get(user=user, action=TeamPlayer.INTEAM)
+    player.user.is_inteam = False
+    player.user.is_captain = False
+    player.user.save()
+    player.delete()
+    if request.user.is_captain:
+        return redirect("teams:team_update_view", request.user.id)
+    else:
+        return redirect("teams:list_view")
+
+
+def team_create_view(request, user_id=None):
+    user = get_object_or_404(User, id=user_id)
+    user.is_inteam = True
+    user.is_captain = True
+    user.save()
+    form = TeamCreateForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        logo = form.cleaned_data['logo']
+        title = form.cleaned_data['title']
+        team = Teams.objects.create(title=title, logo=logo, captain_user=user)
+        TeamPlayer.objects.create(team=team, user = user, action = TeamPlayer.INTEAM)
+        return render(request, 'teams/create_success_view.html', {})
+    else:
+        messages.warning(request, "Некорректные данные", extra_tags='info')
+        return render(request, 'teams/team_edit.html', {'form':form})
+
+
+def team_delete_view(request, user_id=None):
+    if not request.user.is_captain:
+        raise Http404
+    player = get_object_or_404(TeamPlayer, user__id=user_id)
+    player.user.is_inteam = False
+    player.user.is_captain = False
+    player.user.save()
+    team = get_object_or_404(Teams, title=player.team.title)
+    player.delete()
+    team.delete()
+    return render(request, 'teams/team_delete_view.html', {})

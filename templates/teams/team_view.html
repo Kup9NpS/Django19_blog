@@ -18,12 +18,20 @@
     {% if current and player.user.is_captain %}
         <div class="team-edit btn btn-block btn-primary"><a href="{% url 'teams:team_update_view' user.id %}">Редактировать команду</a></div>
     {% endif %}
-    {% if current and not player.user.is_captain %}
+    {% if current and not player.user.is_captain and  not player.action == 1 %}
         <div class="team-edit btn btn-block  btn-danger"><a href="#">Выйти из команды</a></div>
     {% endif %}
+    {% if current and player.action == 1 %}
+        <div class="team-edit label label-success ">Вы подали заявку  <a class ='label label-warning' href="{% url 'teams:reject_view' player.team.id %}">Отменить</a></div>
+
+    {% endif %}
     </div>
-{% if not player.user.is_inteam  %}
-        <div class="team-edit btn btn-block btn-primary"><a href="{% url 'teams:invite_view' team.id %}">Подать заявку на вступлениеу</a></div>
+{% if not request.user.is_inteam and request.user.is_authenticated  %}
+        <div class="team-edit btn btn-block btn-primary"><a href="{% url 'teams:invite_view' team.id %}">Подать заявку на вступление</a></div>
+    {% endif %}
+    {% if current and player.user.is_captain and players|length == 1 %}
+        <div class="team-edit btn btn-block btn-primary"><a href="{% url 'teams:team_delete_view' player.user.id %}">
+            Удалить команду</a></div>
     {% endif %}
 </div>
 

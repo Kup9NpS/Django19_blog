@@ -23,7 +23,7 @@ class Teams(models.Model):
         app_label = 'teams'
 
     def __str__(self):
-        return 'Команда №{} - {}'.format(self.id, self.title)
+        return 'Команда - {}'.format(self.title)
 
 
     def add_captain_in_team(self):

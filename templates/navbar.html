@@ -25,7 +25,6 @@
           </ul>
 
 
-
           <ul class="nav navbar-nav navbar-right">
 
           {% if request.user.is_authenticated %}
@@ -33,10 +32,10 @@
               <a href="{% url 'accounts:user_view' user.id  %}">Профиль</a>&nbsp;
 {#              {% avatar current_user.avatar height="40" width="40" circle="True" sex=user.sex thumbnail="False" %}#}
                  </li>
-              {% if user.is_inteam %}
+              {% if user.is_inteam and not "/create" in request.get_full_path %}
               <li><a href="{% url 'teams:team_view' user.id %}">Моя команда</a>&nbsp;</li>
                   {% elif  not "/teams/" in request.get_full_path  %}
-                  <li><a href="#">Создать команду</a>&nbsp;</li>
+                  <li><a href="{% url 'teams:team_create_view' user.id %}">Создать команду</a>&nbsp;</li>
                   {% endif %}
               <li><a href="{%url 'accounts:logout_view' %}">Выйти</a></li>
             {% else %}

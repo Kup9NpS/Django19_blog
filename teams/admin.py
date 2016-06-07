@@ -15,4 +15,4 @@ class TeamAdmin(admin.ModelAdmin):
     inlines = [TeamPlayerInline]
 
 admin.site.register(Teams, TeamAdmin)
-
+admin.site.register(TeamPlayer)

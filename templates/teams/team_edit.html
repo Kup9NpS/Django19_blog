@@ -12,13 +12,19 @@
 <input type="submit" class="btn btn-defaul" value='Сохранить'/>
 
 </form>
+<div class="col-sm-6 ">
+<h1> Состав команды:</h1> <br/>
+{% for mates in players_inteam %}
+    <li><a href="{% url 'accounts:user_view' mates.user.id%}">{{ mates.user.nickname }}</a></li>
+    <div class=" team-edit btn  btn-warning"><a href="{% url 'teams:user_delete_view' mates.user.id %}">Удалить игрока</a></div>
+{% endfor %}
     </div>
 <div class="col-sm-6 ">
 {% for mate in players %}
     <li><a href="{% url 'accounts:user_view' mate.user.id%}">{{ mate.user.nickname }}</a></li>
     <div class=" team-edit btn  btn-primary">
     <a href="{% url 'teams:add_view' player.team.id %}">Добавить в команду</a></div>
-    <div class=" team-edit btn  btn-warning"><a href="{% url 'teams:delete_view' player.team.id %}">Отклонить заявку</a></div>
+    <div class=" team-edit btn  btn-warning"><a href="{% url 'teams:reject_view' player.team.id %}">Отклонить заявку</a></div>
 {% endfor %}
 </div>
 
