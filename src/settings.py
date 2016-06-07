@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '#m+_ymhrs91v%6^t7y4m8!+01@7%dw^l^kiar3l+c1_8tza-wh'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-IS_PRODUCTION = False
+IS_PRODUCTION = True
 
 if IS_PRODUCTION:
     DEBUG = True
@@ -164,5 +164,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media_cnd")
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'kup9python@gmail.com'
-EMAIL_HOST_PASSWORD = '******'
+EMAIL_HOST_PASSWORD = 'kirich3zippa3'
 EMAIL_SUBJECT_PREFIX = '[LKS-tournaments] '
