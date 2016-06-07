@@ -26,9 +26,9 @@ IS_PRODUCTION = True
 
 if IS_PRODUCTION:
     DEBUG = True
-    CURRENT_HOST = 'http://lks.ru'
-    ALLOWED_HOSTS = ['http://lks.ru:8000', 'http://lks.ru', 'lks.ru',
-                     'http://lks.ru', 'lks.ru']
+    CURRENT_HOST = 'Kupchanski.pythonanywhere.com'
+    ALLOWED_HOSTS = ['http://Kupchanski.pythonanywhere.com:8000', 'http://Kupchanski.pythonanywhere.com', 'Kupchanski.pythonanywhere.com',
+                     'http://Kupchanski.pythonanywhere.com', 'Kupchanski.pythonanywhere.com']
 else:
     DEBUG = True
     CURRENT_HOST = 'http://127.0.0.1:8000'
@@ -170,5 +170,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media_cnd")
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'kup9python@gmail.com'
-EMAIL_HOST_PASSWORD = 'kirich3zippa3'
+EMAIL_HOST_PASSWORD = '***'
 EMAIL_SUBJECT_PREFIX = '[LKS-tournaments] '
