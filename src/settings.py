@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'posts',
     'accounts',
     'teams',
+    'mixes',
     # 3rd party
     'pagedown',
     'markdown_deux',

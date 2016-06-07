@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% block content %}
+ <div class="col-sm-8 col-sm-offset-2">
+ <h1> Миксы</h1>
+
+
+</form>
+{% for obj in object_list %}
+    <div class="row">
+     <div class="col-sm-12">
+    <div class="thumbnail">
+        {% if obj.logo %}
+    <img src="{{ obj.logo.url }}" class="img-responsive ">
+        {% endif %}
+      <div class="caption post_detail_item">
+        <h3><a href='{% url "mixes:mix_view" obj.id  %}'>{{ obj.title}} по {{ obj.type }}</a>
+            <br/> <small>Дата проведения: {{ obj.data }}</small>
+        <br/> <small>Место проведения: {{ obj.place }}</small></h3>
+      </div>
+    </div>
+  </div>
+<hr/>
+    </div>
+{% endfor %}
+{% endblock %}

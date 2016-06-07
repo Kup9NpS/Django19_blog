@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <div class="col-md-6 col-sm-offset-2">
+    <h3>Список зарегестрированных:</h3><br/>
+    {% if not in_that_mix %}
+    <div class="team-edit btn btn-block btn-primary"><a href="{% url 'mixes:add_view' mix.id %}">Зарегестрироваться</a></div>
+    {% else %}
+    <div class="team-edit btn btn-block btn-primary"><a href="{% url 'mixes:leave_view' mix.id %}">Покинуть</a></div>
+    {% endif %}
+<br/>
+     {% for mate in players %}
+        <a href="{% url 'accounts:user_view' mate.user.id%}">{{ mate.user.first_name }}
+            {{ mate.user.last_name }} - {{ mate.user.nickname }} </a> <br/>
+    {% endfor %}
+
+
+{% endblock %}
