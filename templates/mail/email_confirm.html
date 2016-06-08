@@ -30,6 +30,7 @@
                           <tr>
                             <td align="center" valign="middle" style="font-family:Arial;font-size:16px;padding:16px"><a title="Подтвердить" href="{{ current_host }}{% url 'accounts:confirm' activation_key %}" target="_blank" style="font-weight:bold;letter-spacing:normal;line-height:100%;text-align:center;text-decoration:none;color:#ffffff;word-wrap:break-word">Подтвердить</a></td>
                           </tr>
+                        <tr>Если у вас не корректно отображается кнопка, скопируйте эту ссылку в браузер:<a href="{{ current_host }}{% url 'accounts:confirm' activation_key %}">{{ current_host }}{% url 'accounts:confirm' activation_key %}"</a></tr>
                         </tbody>
                       </table>
                     </td>

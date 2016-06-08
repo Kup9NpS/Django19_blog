@@ -51,6 +51,12 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
                                      help_text="Является ли капитаном команды")
     is_inteam = models.BooleanField('В команде', default=False,
                                     help_text="Состоит ли в команде")
+    muted = models.BooleanField('Мут', default=False,
+                                    help_text="Убрать возможность комментировать")
+    team_banned = models.BooleanField('Бан на команды', default=False,
+                                    help_text="Запрет вступления в команды")
+    mix_banned = models.BooleanField('Бан на миксы', default=False,
+                                    help_text="Запрет участия в миксах")
     nickname = models.CharField('Никнейм', max_length=20, default="nameless")
     avatar = models.ImageField(upload_to='avatars', blank=True, null=True, verbose_name='Аватар')
     date_joined = models.DateTimeField('Дата регистрации', default=timezone.now)

@@ -12,7 +12,7 @@
 <input type="submit" class="btn btn-defaul" value='Сохранить'/>
 
 </form>
-{% if '/create/' in request.get_full_path %}
+{% if not '/create' in request.get_full_path %}
 <div class="col-sm-6 ">
 <h1> Состав команды:</h1> <br/>
 {% for mates in players_inteam %}
@@ -21,6 +21,7 @@
 {% endfor %}
     </div>
 <div class="col-sm-6 ">
+	<h1> Новые заявки:</h1> <br/>
 {% for mate in players %}
     <li><a href="{% url 'accounts:user_view' mate.user.id%}">{{ mate.user.nickname }}</a></li>
     <div class=" team-edit btn  btn-primary">

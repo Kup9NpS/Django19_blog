@@ -5,6 +5,7 @@ from .models import User
 from django.utils import timezone
 from django.contrib.auth import authenticate, get_user_model
 
+now = timezone.now()
 User = get_user_model()
 
 
@@ -47,10 +48,13 @@ class UserRegistrationForm(forms.ModelForm):
             'format': 'dd.mm.yy',
             'autoclose': True,
             'showMeridian': True,
+
         }
+        year = now.year
         #TODO: 'bdate': forms.SelectDateWidget(),
         widgets = {'password': forms.PasswordInput(render_value=False),
                    'email': forms.EmailInput(),
+                   'bdate': forms.SelectDateWidget(years=range(year, year-101, -1)),
                    }
 
     def clean_bdate(self):

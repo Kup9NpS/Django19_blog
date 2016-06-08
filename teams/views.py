@@ -37,15 +37,17 @@ def team_list_view(request):
 
 
 def team_detail_view(request, team_id=None):
-    current = False
     teams = get_object_or_404(Teams, id=team_id)
-    players = TeamPlayer.objects.filter(team__title=teams.title, user__is_inteam=True, action=TeamPlayer.INTEAM)
-    context = {
-            'team':teams,
-            'players':players,
-            'current':current
-        }
-    return render(request, 'teams/team_view.html', context)
+    try:
+        TeamPlayer.objects.get(team__title=teams.title, user=request.user,action=TeamPlayer.INTEAM )
+        return redirect('teams:team_view', request.user.id)
+    except TeamPlayer.DoesNotExist:
+        players = TeamPlayer.objects.filter(team__title=teams.title, user__is_inteam=True, action=TeamPlayer.INTEAM)
+        context = {
+                'team': teams,
+                'players': players,
+            }
+        return render(request, 'teams/team_view.html', context)
 
 
 def profile_team_view(request, user_id=None):

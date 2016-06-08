@@ -22,10 +22,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '#m+_ymhrs91v%6^t7y4m8!+01@7%dw^l^kiar3l+c1_8tza-wh'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-IS_PRODUCTION = True
+IS_PRODUCTION = False
 
 if IS_PRODUCTION:
-    DEBUG = True
+    DEBUG = False
     CURRENT_HOST = 'Kupchanski.pythonanywhere.com'
     ALLOWED_HOSTS = ['http://Kupchanski.pythonanywhere.com:8000', 'http://Kupchanski.pythonanywhere.com', 'Kupchanski.pythonanywhere.com',
                      'http://Kupchanski.pythonanywhere.com', 'Kupchanski.pythonanywhere.com']
@@ -99,23 +99,26 @@ WSGI_APPLICATION = 'src.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'lks',
-#         'USER': 'kupchanski',
-#         'PASSWORD': '11235853211',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
-DATABASES = {
+
+
+if IS_PRODUCTION:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+else:
+    DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'lks',
+        'USER': 'kupchanski',
+        'PASSWORD': '11235853211',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
-
 
 
 # Password validation
@@ -170,5 +173,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media_cnd")
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'kup9python@gmail.com'
-EMAIL_HOST_PASSWORD = '***'
+EMAIL_HOST_PASSWORD = '**'
 EMAIL_SUBJECT_PREFIX = '[LKS-tournaments] '
