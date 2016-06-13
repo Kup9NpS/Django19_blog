@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'accounts',
     'teams',
     'mixes',
+    'tours',
     # 3rd party
     'pagedown',
     'markdown_deux',
