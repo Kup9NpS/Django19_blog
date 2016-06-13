@@ -10,7 +10,8 @@
 
     <h3>Состав команды:</h3><br/>
         {% for mate in players %}
- <a href="{% url 'accounts:user_view' mate.user.id%}">{{ mate.user.first_name }} {{ mate.user.last_name }} - {{ mate.user.nickname }} </a> <br/>
+ <a href="{% url 'accounts:user_view' mate.user.id%}">{% if mate.user.is_captain %}<strong>Captain</strong> -{% endif %}
+                {{ mate.user.first_name }} {{ mate.user.last_name }} - {{ mate.user.nickname }} </a> <br/>
 
     {% endfor %}
     <div>

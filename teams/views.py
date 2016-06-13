@@ -38,9 +38,13 @@ def team_list_view(request):
 
 def team_detail_view(request, team_id=None):
     teams = get_object_or_404(Teams, id=team_id)
+
     try:
-        TeamPlayer.objects.get(team__title=teams.title, user=request.user,action=TeamPlayer.INTEAM )
-        return redirect('teams:team_view', request.user.id)
+        if request.user.is_authenticated():
+            TeamPlayer.objects.get(team__title=teams.title, user=request.user, action=TeamPlayer.INTEAM )
+            return redirect('teams:team_view', request.user.id)
+        else:
+            raise TeamPlayer.DoesNotExist
     except TeamPlayer.DoesNotExist:
         players = TeamPlayer.objects.filter(team__title=teams.title, user__is_inteam=True, action=TeamPlayer.INTEAM)
         context = {
